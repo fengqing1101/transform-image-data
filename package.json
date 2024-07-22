@@ -1,0 +1,21 @@
+{
+  "name": "transform-image-data",
+  "version": "1.0.0",
+  "description": "transform-image-data",
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "",
+  "keywords": [
+    "transform",
+    "ImageData"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.3"
+  },
+  "files": ["dist"]
+}
