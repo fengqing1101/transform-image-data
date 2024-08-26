@@ -1,40 +1,34 @@
-type ImageArray = Uint8Array | Uint8ClampedArray;
+import { TransferToWindow } from 'transfer-to-window';
 
-class TransformImageData {
-  /** Input Data */
-  inData: ImageArray;
-  /** Output Data */
-  outData: ImageArray;
-  /** Width of input data */
+interface param {
+  /** 输入数据 */
+  inData: ArrayBuffer;
+  /** 输入宽 */
   inw: number;
-  /** Height of input data */
+  /** 输入高 */
   inh: number;
-  /** Width of output data */
+  /** 输出数据 */
+  outData: ArrayBuffer;
+  /** 输出宽 */
   outw: number;
-  /** Height of output data */
+  /** 输出高 */
   outh: number;
-  /**
-   * The transformation matrix from inData to outData.
-   * [scale, 0, 0, 0, scale, 0, dx, dy, 1]
-   */
-  scale!: number;
-  dx!: number;
-  dy!: number;
-  /**
-   * The transformation matrix from outData to inData.
-   * [invScale, 0, 0, 0, invScale, 0, invDx, invDy, 1]
-   */
-  invScale!: number;
-  invDx!: number;
-  invDy!: number;
-  constructor(inData: ImageArray, inw: number, inh: number, outData: ImageArray, outw: number, outh: number) {
-    this.inData = inData;
-    this.outData = outData;
-    this.inw = inw;
-    this.inh = inh;
-    this.outw = outw;
-    this.outh = outh;
-    this.resize(true);
+  /** 输入窗口转化到输出窗口后最小的宽高尺寸；默认值:1 */
+  minWH?: number;
+  /** 输入窗口转化到输出窗口后最大的宽高尺寸；默认值:Infinity */
+  maxWH?: number;
+}
+
+class TransformImageData extends TransferToWindow {
+  /** 输入数据 */
+  inData: Uint32Array;
+  /** 输出数据 */
+  outData: Uint32Array;
+  constructor(param: param) {
+    super(param, true);
+    this.inData = new Uint32Array(param.inData);
+    this.outData = new Uint32Array(param.outData);
+    this.resize();
   }
 
   /**
@@ -45,90 +39,57 @@ class TransformImageData {
     for (let i = 0; i < outh; i++) {
       const r = Math.round(i * invScale + invDy);
       if (r < 0 || r >= inh) {
-        for (let j = 0; j < outw; j++) {
-          let index = (i * outw + j) * 4;
-          outData[index + 3] = 0;
-        }
+        outData.fill(0, i * outw, (i + 1) * outw);
         continue;
       }
       for (let j = 0; j < outw; j++) {
         const c = Math.round(j * invScale + invDx);
-        let index = (i * outw + j) * 4;
+        let index = i * outw + j;
         if (c < 0 || c >= inw) {
-          outData[index + 3] = 0;
+          outData[index] = 0;
           continue;
         }
-        let ti = (r * inw + c) * 4;
+        let ti = r * inw + c;
         outData[index] = inData[ti];
-        outData[index + 1] = inData[ti + 1];
-        outData[index + 2] = inData[ti + 2];
-        outData[index + 3] = inData[ti + 3];
       }
     }
   }
 
   /**
-   * Translate on outdata
+   * 平移
    * @param dx 
    * @param dy 
-   * @param silent Whether update outData
+   * @param silent 是否更新outData
    */
   translate(dx: number, dy: number, silent?: boolean) {
-    this.dx += dx;
-    this.dy += dy;
-    this.updateInvMatrix();
+    super.translate(dx, dy);
     silent || this.update();
   }
 
   /**
-   * Scale ratio multiple at position(cx,cy) on outdata
+   * 以(cx,cy)为中心缩放ratio比例
    * @param cx 
    * @param cy 
    * @param ratio 
-   * @param silent Whether update outData
+   * @param silent 是否更新outData
    */
   zoom(cx: number, cy: number, ratio: number, silent?: boolean) {
-    const { dx, dy, scale } = this;
-    this.dx = (dx - cx) * ratio + cx;
-    this.dy = (dy - cy) * ratio + cy;
-    this.scale = scale * ratio;
-    this.updateInvMatrix();
+    super.zoom(cx, cy, ratio);
     silent || this.update();
   }
 
   /**
-   * like:
+   * 将输入数据完整放置于输出窗口的正中间；效果类似于CSS效果：
    *    background-size: contain;
    *    background-repeat: no-repeat;
    *    background-position: center; 
-   * @param silent Whether update outData
+   * @param silent 是否更新outData
    */
   resize(silent?: boolean) {
-    const { inw, inh, outw, outh } = this;
-    let scale;
-    if (outw / outh > inw / inh) {
-      scale = outh / inh;
-    } else {
-      scale = outw / inw;
-    }
-
-    this.scale = scale;
-    this.dx = (outw - inw * scale) / 2;
-    this.dy = (outh - inh * scale) / 2;
-    this.updateInvMatrix();
+    super.resize();
     silent || this.update();
   }
 
-  /**
-   * Update the transformation matrix.
-   */
-  updateInvMatrix() {
-    this.invScale = 1 / this.scale;
-    this.invDx = -this.dx / this.scale;
-    this.invDy = -this.dy / this.scale;
-  }
 }
 
-export {
-  TransformImageData,
-}
+export { TransformImageData }

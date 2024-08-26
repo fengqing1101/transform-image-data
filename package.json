@@ -1,9 +1,9 @@
 {
   "name": "transform-image-data",
-  "version": "1.0.0",
-  "description": "transform-image-data",
+  "version": "2.0.0",
+  "description": "将指定窗口大小的数据转化输出到另一窗口",
   "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
@@ -17,5 +17,10 @@
   "devDependencies": {
     "typescript": "^5.5.3"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "transfer-to-window": "^1.0.0"
+  }
 }
