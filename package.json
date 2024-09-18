@@ -1,6 +1,6 @@
 {
   "name": "transform-image-data",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "将指定窗口大小的数据转化输出到另一窗口",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,6 +13,7 @@
     "transform",
     "ImageData"
   ],
+  "homepage": "https://github.com/fengqing1101/transform-image-data",
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.5.3"

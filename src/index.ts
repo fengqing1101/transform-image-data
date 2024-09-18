@@ -37,13 +37,13 @@ class TransformImageData extends TransferToWindow {
   update() {
     const { inw, inh, inData, outw, outh, outData, invScale, invDx, invDy } = this;
     for (let i = 0; i < outh; i++) {
-      const r = Math.round(i * invScale + invDy);
+      const r = Math.floor(i * invScale + invDy);
       if (r < 0 || r >= inh) {
         outData.fill(0, i * outw, (i + 1) * outw);
         continue;
       }
       for (let j = 0; j < outw; j++) {
-        const c = Math.round(j * invScale + invDx);
+        const c = Math.floor(j * invScale + invDx);
         let index = i * outw + j;
         if (c < 0 || c >= inw) {
           outData[index] = 0;
