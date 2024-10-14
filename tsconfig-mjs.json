@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "NodeNext",
+    "target": "es2015",
+    "module": "ESNext",
     "declaration": true,
-    "outDir": "./dist",
+    "declarationDir": "./dist",
+    "outDir": "./temp/mjs",
     "rootDir": "./src",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "Node",
     "strict": true
   },
   "include": [

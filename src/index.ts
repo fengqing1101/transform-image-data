@@ -1,23 +1,12 @@
 import { TransferToWindow } from 'transfer-to-window';
 
-interface param {
+type ConstructorParam = ConstructorParameters<typeof TransferToWindow>[0]; 
+type param = ConstructorParam & {
   /** 输入数据 */
   inData: ArrayBuffer;
-  /** 输入宽 */
-  inw: number;
-  /** 输入高 */
-  inh: number;
   /** 输出数据 */
   outData: ArrayBuffer;
-  /** 输出宽 */
-  outw: number;
-  /** 输出高 */
-  outh: number;
-  /** 输入窗口转化到输出窗口后最小的宽高尺寸；默认值:1 */
-  minWH?: number;
-  /** 输入窗口转化到输出窗口后最大的宽高尺寸；默认值:Infinity */
-  maxWH?: number;
-}
+};
 
 class TransformImageData extends TransferToWindow {
   /** 输入数据 */
@@ -92,4 +81,4 @@ class TransformImageData extends TransferToWindow {
 
 }
 
-export { TransformImageData }
+export { TransformImageData, TransformImageData as default }

@@ -1,11 +1,18 @@
 {
   "name": "transform-image-data",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "将指定窗口大小的数据转化输出到另一窗口",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
+    }
+  },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig-cjs.json && tsc -p tsconfig-mjs.json",
+    "postbuild": "node rename.js",
     "prepublishOnly": "npm run build"
   },
   "author": "",
@@ -22,6 +29,6 @@
     "dist"
   ],
   "dependencies": {
-    "transfer-to-window": "^1.0.0"
+    "transfer-to-window": "^1.0.1"
   }
 }

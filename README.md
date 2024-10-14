@@ -24,6 +24,10 @@ new TransformImageData(
     minWH?: number,
     // 输入窗口转化到输出窗口后最大的宽高尺寸；默认值:Infinity
     minWH?: number,
+    // 是否限制数据始终有区域位于窗口内部
+    limitInWindow?: boolean,
+    // 显示在窗口内部的最小值
+    limitSize?: number,
     // 输入图像缓冲区
     inData: ArrayBuffer,
     // 输出图像缓冲区

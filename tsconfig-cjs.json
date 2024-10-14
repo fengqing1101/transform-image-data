@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "CommonJS",
+    "declaration": true,
+    "declarationDir": "./dist",
+    "outDir": "./temp/cjs",
+    "rootDir": "./src",
+    "moduleResolution": "Node",
+    "strict": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
